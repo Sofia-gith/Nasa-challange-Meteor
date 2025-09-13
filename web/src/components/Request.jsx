@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import styles from '@styles/Request.module.css'
+const URL_BASE = 'http://localhost:3000'
 
 const Request = () => {
   async function umaRequisisao() {
     const stayHere = 'Eu estive por aqui'
     alert('Entrei')
     try {
-      fetch('/api/hi', {
+      fetch(`${URL_BASE}/api/hi`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
