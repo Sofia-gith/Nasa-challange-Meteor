@@ -7,7 +7,7 @@ const Request = () => {
     const stayHere = 'Eu estive por aqui'
     alert('Entrei')
     try {
-      fetch(`${URL_BASE}/api/hi`, {
+      fetch(`/api/hi`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
