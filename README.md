@@ -98,3 +98,37 @@ As credenciais devem ser obtidas pelo gerenciador seguro utilizado pela equipe, 
 6. Abra um PR para o `develop` e aguarde revisão
 7. Após validação, faça o merge do `develop` para o `main`
 
+### 3. Formato de Requisição no Frontend
+
+- **Desenvolvimento:**  
+  Utilize o endereço local para chamadas à API:
+  ```js
+  fetch('http://localhost:3000/api/endpoint', { ... })
+  ```
+
+- **Produção (antes de subir para o GitHub):**  
+  Utilize o caminho relativo para evitar conflitos no deploy:
+  ```js
+  fetch('/api/endpoint', { ... })
+  ```
+
+### 4. Comentários sobre o `app.listen` no Backend
+
+- **Desenvolvimento:**  
+  Mantenha as linhas do `app.listen` descomentadas para iniciar o servidor local.
+  ```js
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando em: http://localhost:${PORT}`)
+  })
+  ```
+
+- **Produção (antes de subir para o GitHub):**  
+  Comente as linhas do `app.listen` para evitar conflito com o servidor criado pela Vercel:
+  ```js
+  // app.listen(PORT, () => {
+  //   console.log(`Servidor rodando em: http://localhost:${PORT}`)
+  // })
+  ```
+
+> **Observação:**  
+> Sempre revise essas configurações antes de subir para o repositório remoto ou realizar o deploy.
