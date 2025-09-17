@@ -1,3 +1,4 @@
+import nasaHorizonsRouter from "./router/nasaHorizons.js";
 import express from 'express'
 import cors from 'cors'
 
@@ -18,16 +19,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.post('/api/hi', (req, res) => {
-  console.log('Here')
-  const { data } = req.body
-  console.log('Data: ', data)
-
-  return res.status(200).json({
-    data: 'Algum retorno do meu proprio backend',
-    message: 'Sucesso',
-  })
-})
+app.use("/api", nasaHorizonsRouter);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em: http://localhost:${PORT}`)
