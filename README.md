@@ -6,6 +6,10 @@
 - Israel de Souza Lima
 - Sofia Floriano Amorim
 
+## Notas
+
+Para verificar as notas de andamento, leia: [NOTES.md](./assets/NOTES.md)
+
 ## Plano do Projeto: Meteor Madness (NASA)
 
 | Etapa                        | Ações Principais                                                                 | Ferramentas Recomendadas                                                                                           |
