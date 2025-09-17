@@ -10,4 +10,5 @@
 ### Progresso
 
 - [x] Dados API JPL obtidos  
-- [ ] Filtrar dados
+- [x] Filtrar dados
+- [ ] Calcular a Posição e a Velocidade
