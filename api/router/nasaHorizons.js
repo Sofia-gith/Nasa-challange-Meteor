@@ -37,6 +37,7 @@ router.get("/apophis-data", (req, res) => {
         }
         
         const apophisData = {
+            name: apophis[0].trim(),
             a_au: parseFloat(apophis[2]),
             e: parseFloat(apophis[3]),
             i_rad: !isNaN(parseFloat(apophis[4])) ? parseFloat(apophis[4]) * PI / 180 : 0,
