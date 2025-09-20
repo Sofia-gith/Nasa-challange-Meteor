@@ -55,6 +55,17 @@ router.get("/apophis-data", (req, res) => {
         for (let i = 0; i < 5; i++) {
             E = E - (E - apophisData.e * Math.sin(E) - M_rad) / (1 - apophisData.e * Math.cos(E));
         }
+
+        //  CÁLCULO DA POSIÇÃO (X, Y, Z)
+        const r_au = apophisData.a_au * (1 - apophisData.e * Math.cos(E));
+        const nu_rad = Math.atan2(Math.sqrt(1 - Math.pow(apophisData.e, 2)) * Math.sin(E), Math.cos(E) - apophisData.e);
+
+        const x_prime = r_au * Math.cos(nu_rad);
+        const y_prime = r_au * Math.sin(nu_rad);
+
+        const pos_x_au = x_prime * (Math.cos(apophisData.om_rad) * Math.cos(apophisData.w_rad) - Math.sin(apophisData.om_rad) * Math.sin(apophisData.w_rad) * Math.cos(apophisData.i_rad)) - y_prime * (Math.cos(apophisData.om_rad) * Math.sin(apophisData.w_rad) + Math.sin(apophisData.om_rad) * Math.cos(apophisData.w_rad) * Math.cos(apophisData.i_rad));
+        const pos_y_au = x_prime * (Math.sin(apophisData.om_rad) * Math.cos(apophisData.w_rad) + Math.cos(apophisData.om_rad) * Math.sin(apophisData.w_rad) * Math.cos(apophisData.i_rad)) + y_prime * (Math.cos(apophisData.om_rad) * Math.cos(apophisData.w_rad) * Math.cos(apophisData.i_rad) - Math.sin(apophisData.om_rad) * Math.sin(apophisData.w_rad));
+        const pos_z_au = x_prime * (Math.sin(apophisData.w_rad) * Math.sin(apophisData.i_rad)) + y_prime * (Math.cos(apophisData.w_rad) * Math.sin(apophisData.i_rad));
             
         
         return res.status(200).send(apophisData)
