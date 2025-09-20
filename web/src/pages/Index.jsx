@@ -1,9 +1,9 @@
-import Request from '@components/Request.jsx'
+import DadosAsteroideApophis from '@components/DadosAsteroideApophis.jsx'
 
 function Index() {
     return (
         <>
-            <Request />
+            <DadosAsteroideApophis />
         </>
     )
 }

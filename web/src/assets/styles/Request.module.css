@@ -1,5 +1,8 @@
 .example{
-    margin: 100px;
-    background-color: red;
+    margin: 20px;
+    background-color: rgb(131, 131, 224);
     padding: 50px;
+    border-radius: 200px;
+    cursor: pointer;
+    text-align: center;
 }

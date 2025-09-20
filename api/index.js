@@ -9,7 +9,7 @@ const app = express();
 const corsOptions = {
   // Defina as origens permitidas para desenvolvimento e produção
   origin: [
-    'http://localhost:3000', // URL do seu front-end em desenvolvimento
+    'http://localhost:5173', // URL do seu front-end em desenvolvimento
     'https://teste-teamplate-vercel-html-node.vercel.app' // URL do seu front-end em produção
   ],
   methods: ['GET', 'POST'], // Métodos permitidos
