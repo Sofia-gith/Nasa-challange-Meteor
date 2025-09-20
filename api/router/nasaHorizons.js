@@ -36,19 +36,25 @@ router.get("/apophis-data", (req, res) => {
             return res.status(404).send("Apophis data not found.");
         }
         
-        //  `parseFloat` para garantir que os valores sejam numéricos
         const apophisData = {
-            name: apophis[0],
-            diameter_km: parseFloat(apophis[1]),
-            mass_kg: MASSA_KG,
-            // Elementos Orbitais
-            a_au: parseFloat(apophis[2]), // semi-eixo maior (au)
-            e: parseFloat(apophis[3]), // excentricidade
-            i_deg: parseFloat(apophis[4]), // inclinação (graus)
-            om_deg: parseFloat(apophis[5]), // longitude do nó ascendente (graus)
-            w_deg: parseFloat(apophis[6]), // argumento do periélio (graus)
-            tp_jd: parseFloat(apophis[7]), // tempo de passagem pelo periélio (dias julianos)
+            a_au: parseFloat(apophis[2]),
+            e: parseFloat(apophis[3]),
+            i_rad: !isNaN(parseFloat(apophis[4])) ? parseFloat(apophis[4]) * PI / 180 : 0,
+            om_rad: !isNaN(parseFloat(apophis[5])) ? parseFloat(apophis[5]) * PI / 180 : 0,
+            w_rad: !isNaN(parseFloat(apophis[6])) ? parseFloat(apophis[6]) * PI / 180 : 0,
+            tp_jd: parseFloat(apophis[7]),
         };
+
+        const a_km = apophisData.a_au * KM_PER_AU;
+        const JD_now = new Date().getTime() / 86400000 + 2440587.5;
+        
+        // 1. CÁLCULO DA ANOMALIA EXCÊNTRICA (E)
+        const n_rad_s = Math.sqrt(GM_SUN / Math.pow(a_km, 3));
+        const M_rad = n_rad_s * (JD_now - apophisData.tp_jd) * 86400;
+        let E = M_rad;
+        for (let i = 0; i < 5; i++) {
+            E = E - (E - apophisData.e * Math.sin(E) - M_rad) / (1 - apophisData.e * Math.cos(E));
+        }
             
         
         return res.status(200).send(apophisData)
