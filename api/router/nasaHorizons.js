@@ -5,6 +5,17 @@ const URL_NASA_GET = 'https://ssd-api.jpl.nasa.gov/sbdb_query.api'
 
 const router = Router();
 
+// Constantes do sistema solar
+const GM_SUN = 1.3271244e11; // Constante gravitacional do Sol em km^3/s^2
+const KM_PER_AU = 149597870.7; // 1 Unidade Astronômica em km
+const PI = Math.PI;
+
+// Cálculo da massa
+const DENSIDADE_KG_M3 = 2700;
+const RAIO_M = 170;
+const VOLUME_M3 = (4/3) * PI * Math.pow(RAIO_M, 3);
+const MASSA_KG = DENSIDADE_KG_M3 * VOLUME_M3;
+
 router.get("/apophis-data", (req, res) => {
     console.log("GET /apophis-data | Entrando no AXIOS");   
 
@@ -19,19 +30,17 @@ router.get("/apophis-data", (req, res) => {
     .then( response => {
         console.log("GET /apophis-data | Exibindo data");        
         let dadosRetorno = response.data.data
-        const apophis = dadosRetorno.find(item => item[0].includes("Apophis"));
-                        
-        // calculo da massa
-        const densidade_kg_m3 = 2700;
-        const raio_m = 170;
-        const volume_m3 = (4/3) * Math.PI * Math.pow(raio_m, 3);
-        const massa_kg = densidade_kg_m3 * volume_m3;
+        const apophis = dadosRetorno.find(item => item[0].includes("Apophis"));       
+        
+        if (!apophis) {
+            return res.status(404).send("Apophis data not found.");
+        }
         
         //  `parseFloat` para garantir que os valores sejam numéricos
         const apophisData = {
             name: apophis[0],
             diameter_km: parseFloat(apophis[1]),
-            mass_kg: massa_kg,
+            mass_kg: MASSA_KG,
             // Elementos Orbitais
             a_au: parseFloat(apophis[2]), // semi-eixo maior (au)
             e: parseFloat(apophis[3]), // excentricidade
