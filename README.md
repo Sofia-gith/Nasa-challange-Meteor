@@ -118,6 +118,8 @@ As credenciais devem ser obtidas pelo gerenciador seguro utilizado pela equipe, 
 
 ### 4. Comentários sobre o `app.listen` no Backend
 
+OBS: Aparentemente, a Vercel atualizou esse conflito. Contudo, se necessário aplique os comentários.
+
 - **Desenvolvimento:**  
   Mantenha as linhas do `app.listen` descomentadas para iniciar o servidor local.
   ```js
