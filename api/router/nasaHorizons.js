@@ -48,7 +48,7 @@ router.get("/apophis-data", (req, res) => {
         const a_km = apophisData.a_au * KM_PER_AU;
         const JD_now = new Date().getTime() / 86400000 + 2440587.5;
         
-        // 1. CÁLCULO DA ANOMALIA EXCÊNTRICA (E)
+        //  CÁLCULO DA ANOMALIA EXCÊNTRICA (E)
         const n_rad_s = Math.sqrt(GM_SUN / Math.pow(a_km, 3));
         const M_rad = n_rad_s * (JD_now - apophisData.tp_jd) * 86400;
         let E = M_rad;
@@ -66,13 +66,28 @@ router.get("/apophis-data", (req, res) => {
         const pos_x_au = x_prime * (Math.cos(apophisData.om_rad) * Math.cos(apophisData.w_rad) - Math.sin(apophisData.om_rad) * Math.sin(apophisData.w_rad) * Math.cos(apophisData.i_rad)) - y_prime * (Math.cos(apophisData.om_rad) * Math.sin(apophisData.w_rad) + Math.sin(apophisData.om_rad) * Math.cos(apophisData.w_rad) * Math.cos(apophisData.i_rad));
         const pos_y_au = x_prime * (Math.sin(apophisData.om_rad) * Math.cos(apophisData.w_rad) + Math.cos(apophisData.om_rad) * Math.sin(apophisData.w_rad) * Math.cos(apophisData.i_rad)) + y_prime * (Math.cos(apophisData.om_rad) * Math.cos(apophisData.w_rad) * Math.cos(apophisData.i_rad) - Math.sin(apophisData.om_rad) * Math.sin(apophisData.w_rad));
         const pos_z_au = x_prime * (Math.sin(apophisData.w_rad) * Math.sin(apophisData.i_rad)) + y_prime * (Math.cos(apophisData.w_rad) * Math.sin(apophisData.i_rad));
-            
+
+        // CÁLCULO DA VELOCIDADE ESCALAR
+        const vp_km_s = Math.sqrt(GM_SUN / a_km);
+        const speed_km_s = vp_km_s * Math.sqrt((1 + apophisData.e) / (1 - apophisData.e)) * Math.abs(1 - apophisData.e * Math.cos(E));
         
-        return res.status(200).send(apophisData)
+        const result = {
+            asteroidName: apophisData.name,
+            mass_kg: MASSA_KG,
+            velocity_km_s: speed_km_s,
+            position_km: {
+                x: pos_x_au * KM_PER_AU,
+                y: pos_y_au * KM_PER_AU,
+                z: pos_z_au * KM_PER_AU,
+            }
+        };            
+        
+        console.log('Dados calculados:', result);
+        return res.status(200).json(result);
     })
-    .catch(function (data){
+    .catch( error => {
         console.log("GET /apophis-data | ERRO AO exibir data do APOPHIS ");        
-        console.log(data);
+        console.log(error);
         return res.status(500).send("Internal Server Error");
     })
 });
