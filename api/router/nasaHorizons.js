@@ -2,16 +2,23 @@ import { Router } from "express";
 import axios from "axios";
 
 const URL_NASA_GET = 'https://ssd-api.jpl.nasa.gov/sbdb_query.api'
-const endpoint = `fields=full_name,diameter,a,e,i,om,w,tp&sb-ns=n&sb-group=neo`
 
 const router = Router();
 
 router.get("/apophis-data", (req, res) => {
-    console.log("GET /apophis-data | Entrando no AXIOS");        
+    console.log("GET /apophis-data | Entrando no AXIOS");   
+
+    // construindo URL
+    const params = new URLSearchParams();
+    params.set("fields", "full_name,diameter,a,e,i,om,w,tp");
+    params.set("sb-ns", "n");
+    params.set("sb-group", "neo");
+    const endpoint = params.toString();
+
     axios.get(`${URL_NASA_GET}?${endpoint}`)
-    .then(function (data) {
+    .then( response => {
         console.log("GET /apophis-data | Exibindo data");        
-        let dadosRetorno = data.data.data
+        let dadosRetorno = response.data.data
         const apophis = dadosRetorno.find(item => item[0].includes("Apophis"));
                         
         // calculo da massa
@@ -40,6 +47,7 @@ router.get("/apophis-data", (req, res) => {
     .catch(function (data){
         console.log("GET /apophis-data | ERRO AO exibir data do APOPHIS ");        
         console.log(data);
+        return res.status(500).send("Internal Server Error");
     })
 });
 
